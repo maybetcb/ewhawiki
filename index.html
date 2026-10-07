@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이화외고위키</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:#f5f6f8;color:#222}
+.wrap{max-width:860px;margin:0 auto;padding:12px}
+header{display:flex;justify-content:space-between;align-items:center;background:#1f4e9c;color:#fff;padding:12px 16px;border-radius:10px}
+header h1{margin:0;font-size:20px;cursor:pointer}
+button{font:inherit;padding:7px 12px;border:1px solid #ccd;border-radius:8px;background:#fff;cursor:pointer;white-space:nowrap}
+button.pri{background:#1f4e9c;color:#fff;border-color:#1f4e9c}
+button:disabled{opacity:.6}
+input,textarea{font:inherit;width:100%;padding:8px;border:1px solid #ccd;border-radius:8px}
+textarea{min-height:300px;font-family:monospace;font-size:14px}
+.row{display:flex;gap:8px;margin:10px 0}
+.card{background:#fff;border:1px solid #e3e5ea;border-radius:10px;padding:16px;margin-top:10px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #eee;padding-bottom:8px}
+.top h2{margin:0;font-size:24px;word-break:break-all}
+.meta{font-size:12px;color:#888;margin-top:6px}
+.err{color:#c0392b;font-size:13px;min-height:18px}
+.note{font-size:13px;color:#555;margin-top:6px}
+.body h3{border-bottom:1px solid #eee;padding-bottom:4px;margin:20px 0 8px}
+.body p,.body li{line-height:1.7}
+a.lk{color:#1f4e9c;text-decoration:none;cursor:pointer}
+.tag{font-size:11px;padding:2px 6px;border-radius:6px;margin-left:6px;background:#e8eefb;color:#1f4e9c}
+.tag.anon{background:#f0f0f0;color:#666}
+.rc{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:6px 0;border-bottom:1px solid #f0f0f0}
+.rc span:last-child{color:#999;font-size:12px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1 id="home">이화외고위키</h1><button id="lb">관리자</button></header>
+
+  <div id="lp" class="card hide">
+    <input id="em" type="email" placeholder="관리자 이메일">
+    <div class="row"><input id="pw" type="password" placeholder="비밀번호"><button id="pwb" class="pri">로그인</button></div>
+    <div id="pwe" class="err"></div>
+  </div>
+
+  <div class="row"><input id="q" placeholder="문서 검색 또는 새 문서 이름"><button id="go">검색</button></div>
+  <div id="qerr" class="err"></div>
+
+  <div class="card">
+    <div class="top"><h2 id="ttl">대문</h2><div><button id="del" class="hide">삭제</button> <button id="eb" class="hide">편집</button></div></div>
+    <div id="meta" class="meta"></div>
+    <div id="notice" class="note"></div>
+    <div id="view" class="body">불러오는 중…</div>
+    <div id="edit" class="hide">
+      <textarea id="ta"></textarea>
+      <div id="terr" class="err"></div>
+      <div class="row" style="justify-content:flex-end"><button id="cx">취소</button><button id="sv" class="pri">저장</button></div>
+    </div>
+  </div>
+
+  <div class="card"><b>최근 변경</b><div id="recent"></div></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// ▼▼▼ 여기 두 곳만 ▼▼▼
+const firebaseConfig = {
+  apiKey: "AIzaSyCBNoDgEXrUTF1rHVSSQY-GT4lxEK-u6CQ",
+  authDomain: "ewhawiki.firebaseapp.com",
+  projectId: "ewhawiki",
+  appId: "1:1028830598181:web:f8c7835c04decdbd4c9bcc"
+};
+const ADMIN_UID = "LfxKl6VWZCdz2mB5vRBbBaIXDhZ2";
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+const app = initializeApp(firebaseConfig);
+const fs = getFirestore(app);
+const auth = getAuth(app);
+
+const DEFAULTS = {
+  "대문": "'''이화외고위키'''에 오신 걸 환영합니다!\n\n이화외고 학생이라면 누구나 새 문서를 작성할 수 있어요.\n\n== 시작하기 ==\n* [[이용 규칙]]을 먼저 읽어 주세요\n* [[위키 문법]]에서 쓰는 법을 확인하세요\n* 위 검색창에 없는 문서 이름을 치면 새 문서를 만들 수 있어요\n\n== 안내 ==\n이미 있는 문서의 수정과 삭제는 관리자만 할 수 있어요. 고칠 부분이 있으면 관리자에게 알려 주세요.",
+  "이용 규칙": "모두가 즐겁게 쓰는 위키를 위한 약속이에요.\n\n== 금지 사항 ==\n* 친구, 선생님 등 실존 인물에 대한 비방이나 놀림\n* 전화번호, 주소 같은 개인정보 작성\n* 허위 사실이나 욕설\n\n== 처리 ==\n규칙을 어긴 문서는 관리자가 수정하거나 삭제해요.",
+  "위키 문법": "이 위키에서 쓸 수 있는 문법이에요.\n\n== 기본 ==\n* '''굵게''' → 작은따옴표 3개로 감싸기\n* [[대문]] → 대괄호 2개로 감싸면 다른 문서 링크\n\n== 문단 ==\n등호 두 개로 감싸면 문단 제목이 돼요.\n줄 앞에 별표(*)를 붙이면 목록이 돼요."
+};
+
+const $ = id => document.getElementById(id);
+let admin = false, cache = null, confirmDel = false;
+let cur = "대문";
+try { cur = decodeURIComponent(location.hash.slice(1)) || "대문"; } catch (e) {}
+
+const ref = n => doc(fs, "pages", encodeURIComponent(n));
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const fmt = u => u && u.toDate ? u.toDate().toLocaleString("ko-KR") : "방금 전";
+const tag = by => by === "관리자" ? '<span class="tag">관리자</span>' : '<span class="tag anon">익명</span>';
+const badTitle = v => v.length > 100 || v === "." || v === ".." || /^__.*__$/.test(v);
+
+function inline(s) {
+  s = esc(s).replace(/'''(.+?)'''/g, "<b>$1</b>");
+  return s.replace(/\[\[(.+?)\]\]/g, (m, n) => `<a class="lk" data-p="${n}">${n}</a>`);
+}
+function render(t) {
+  let h = "", L = false;
+  t.split("\n").forEach(l => {
+    const hm = l.match(/^==\s*(.+?)\s*==$/);
+    if (l.startsWith("* ")) { if (!L) { h += "<ul>"; L = true; } h += "<li>" + inline(l.slice(2)) + "</li>"; return; }
+    if (L) { h += "</ul>"; L = false; }
+    if (hm) h += "<h3>" + inline(hm[1]) + "</h3>";
+    else if (l.trim()) h += "<p>" + inline(l) + "</p>";
+  });
+  if (L) h += "</ul>";
+  return h;
+}
+
+async function show(name, editing = false) {
+  cur = name; confirmDel = false;
+  history.replaceState(null, "", "#" + encodeURIComponent(name));
+  $("ttl").textContent = name; $("notice").textContent = ""; $("del").textContent = "삭제";
+  let p = null;
+  try { const s = await getDoc(ref(name)); p = s.exists() ? s.data() : null; }
+  catch (e) { $("view").textContent = "불러오지 못했어요. 새로고침해 보세요."; return; }
+  if (name !== cur) return;
+  cache = p;
+  const editMode = editing || !p;
+  $("edit").classList.toggle("hide", !editMode);
+  $("eb").classList.toggle("hide", editMode);
+  $("del").classList.toggle("hide", !(admin && p && !editMode && name !== "대문"));
+  if (editMode) {
+    $("view").innerHTML = p ? "" : "<p>아직 없는 문서예요. 누구나 새로 작성할 수 있어요.</p>";
+    $("meta").textContent = p ? "관리자 편집 중" : "새 문서 작성";
+    if (!admin) $("notice").textContent = "저장한 뒤에는 관리자만 수정할 수 있어요. 신중하게 작성해 주세요.";
+    $("ta").value = p ? p.t : ""; $("terr").textContent = "";
+  } else {
+    $("view").innerHTML = render(p.t);
+    $("meta").innerHTML = "마지막 수정: " + fmt(p.u) + tag(p.by);
+    $("eb").textContent = admin ? "편집" : "🔒 편집";
+  }
+}
+
+async function recent() {
+  try {
+    const s = await getDocs(query(collection(fs, "pages"), orderBy("u", "desc"), limit(10)));
+    $("recent").innerHTML = s.docs.map(d => {
+      const p = d.data();
+      return `<div class="rc"><span><a class="lk" data-p="${esc(p.title)}">${esc(p.title)}</a>${tag(p.by)}</span><span>${fmt(p.u)}</span></div>`;
+    }).join("") || '<div class="note">아직 문서가 없어요.</div>';
+  } catch (e) {}
+}
+
+async function seed() {
+  for (const [n, t] of Object.entries(DEFAULTS)) {
+    const s = await getDoc(ref(n));
+    if (!s.exists()) await setDoc(ref(n), { title: n, t, u: serverTimestamp(), by: "관리자" });
+  }
+}
+
+async function search() {
+  const v = $("q").value.trim();
+  if (!v) { $("qerr").textContent = "문서 이름을 입력하세요"; return; }
+  if (badTitle(v)) { $("qerr").textContent = "쓸 수 없는 문서 이름이에요"; return; }
+  $("qerr").textContent = ""; $("q").value = "";
+  const s = await getDoc(ref(v));
+  if (s.exists()) return show(v);
+  const all = await getDocs(collection(fs, "pages"));
+  const hit = all.docs.map(d => d.data().title).find(t => t.includes(v));
+  show(hit || v);
+}
+
+const linkClick = e => { const a = e.target.closest("a.lk"); if (a) show(a.dataset.p); };
+$("view").onclick = linkClick;
+$("recent").onclick = linkClick;
+$("home").onclick = () => show("대문");
+$("go").onclick = search;
+$("q").onkeydown = e => { if (e.key === "Enter") search(); };
+$("q").oninput = () => $("qerr").textContent = "";
+$("ta").oninput = () => $("terr").textContent = "";
+
+$("eb").onclick = () => {
+  if (!admin) { $("notice").textContent = "문서 수정은 관리자 로그인 후 가능해요."; $("lp").classList.remove("hide"); return; }
+  show(cur, true);
+};
+$("cx").onclick = () => show(cache ? cur : "대문");
+
+$("sv").onclick = async () => {
+  const t = $("ta").value;
+  if (!t.trim()) { $("terr").textContent = "내용을 입력하세요"; return; }
+  if (cache && !admin) { $("terr").textContent = "이미 있는 문서는 관리자만 수정할 수 있어요"; return; }
+  $("sv").disabled = true;
+  try {
+    await setDoc(ref(cur), { title: cur, t, u: serverTimestamp(), by: admin ? "관리자" : "익명" });
+    await show(cur); recent();
+  } catch (e) {
+    $("terr").textContent = cache ? "수정 권한이 없어요" : "저장하지 못했어요. 누가 먼저 같은 문서를 만들었을 수 있어요.";
+  }
+  $("sv").disabled = false;
+};
+
+$("del").onclick = async () => {
+  if (!confirmDel) { confirmDel = true; $("del").textContent = "한 번 더 누르면 삭제"; return; }
+  try { await deleteDoc(ref(cur)); recent(); show("대문"); }
+  catch (e) { $("notice").textContent = "삭제하지 못했어요."; }
+};
+
+$("lb").onclick = () => { if (admin) { signOut(auth); return; } $("lp").classList.toggle("hide"); };
+const login = async () => {
+  const em = $("em").value.trim(), pw = $("pw").value;
+  if (!em || !pw) { $("pwe").textContent = "이메일과 비밀번호를 입력하세요"; return; }
+  try { await signInWithEmailAndPassword(auth, em, pw); $("lp").classList.add("hide"); $("pw").value = ""; $("pwe").textContent = ""; }
+  catch (e) { $("pwe").textContent = "이메일 또는 비밀번호가 맞지 않아요"; }
+};
+$("pwb").onclick = login;
+$("pw").onkeydown = e => { if (e.key === "Enter") login(); };
+
+onAuthStateChanged(auth, async u => {
+  admin = !!u && u.uid === ADMIN_UID;
+  $("lb").textContent = u ? "로그아웃" : "관리자";
+  if (admin) await seed();
+  show(cur); recent();
+});
+</script>
+</body>
+</html>
