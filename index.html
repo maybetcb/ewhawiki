@@ -6,66 +6,85 @@
 <title>이화외고위키</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:#f5f6f8;color:#222}
+body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:#f4f8ef;color:#222}
 .wrap{max-width:860px;margin:0 auto;padding:12px}
-header{display:flex;justify-content:space-between;align-items:center;background:#1f4e9c;color:#fff;padding:12px 16px;border-radius:10px}
-header h1{margin:0;font-size:20px;cursor:pointer}
-button{font:inherit;padding:7px 12px;border:1px solid #ccd;border-radius:8px;background:#fff;cursor:pointer;white-space:nowrap}
-button.pri{background:#1f4e9c;color:#fff;border-color:#1f4e9c}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#a5d86e;color:#1f3d0a;padding:12px 16px;border-radius:10px}
+header h1{margin:0;font-size:21px;cursor:pointer}
+header small{display:block;font-size:12px;margin-top:2px;color:#33571a}
+button,.addpic{font:inherit;padding:7px 12px;border:1px solid #c9d6bd;border-radius:8px;background:#fff;color:#222;cursor:pointer;white-space:nowrap;display:inline-block}
+button.pri{background:#8cc63f;border-color:#8cc63f;color:#1a330a;font-weight:600}
+button.danger{color:#c0392b}
 button:disabled{opacity:.6}
-input,textarea{font:inherit;width:100%;padding:8px;border:1px solid #ccd;border-radius:8px}
-textarea{min-height:300px;font-family:monospace;font-size:14px}
-.row{display:flex;gap:8px;margin:10px 0}
-.card{background:#fff;border:1px solid #e3e5ea;border-radius:10px;padding:16px;margin-top:10px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #eee;padding-bottom:8px}
-.top h2{margin:0;font-size:24px;word-break:break-all}
-.meta{font-size:12px;color:#888;margin-top:6px}
-.err{color:#c0392b;font-size:13px;min-height:18px}
-.note{font-size:13px;color:#555;margin-top:6px}
-.body h3{border-bottom:1px solid #eee;padding-bottom:4px;margin:20px 0 8px}
-.body p,.body li{line-height:1.7}
-a.lk{color:#1f4e9c;text-decoration:none;cursor:pointer}
-.tag{font-size:11px;padding:2px 6px;border-radius:6px;margin-left:6px;background:#e8eefb;color:#1f4e9c}
+input,textarea,select{font:inherit;width:100%;padding:10px;border:1px solid #cdd8c2;border-radius:8px;background:#fff;color:#222}
+textarea{min-height:260px;margin:8px 0;resize:vertical}
+.vh{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden}
+.bar{display:flex;gap:8px;margin:10px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 10px;padding-bottom:2px}
+.tabs button.on{background:#a5d86e;border-color:#a5d86e;color:#1f3d0a;font-weight:600}
+.card{background:#fff;border:1px solid #e1e8d8;border-radius:10px;padding:16px}
+.lh{font-weight:600;padding-bottom:8px;border-bottom:2px solid #a5d86e;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item{display:flex;align-items:center;gap:8px;padding:11px 2px;border-bottom:1px solid #eef2e8;cursor:pointer}
+.item:hover{background:#f7fbf2}
+.item .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .m{font-size:12px;color:#999;white-space:nowrap}
+.pin{font-size:11px;background:#a5d86e;color:#1f3d0a;padding:2px 6px;border-radius:6px;font-weight:600}
+.gl{font-size:12px;color:#3d7a12;white-space:nowrap}
+.tag{font-size:11px;padding:2px 6px;border-radius:6px;background:#e6f4d6;color:#2f5e10;margin-right:4px}
 .tag.anon{background:#f0f0f0;color:#666}
-.rc{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:6px 0;border-bottom:1px solid #f0f0f0}
-.rc span:last-child{color:#999;font-size:12px}
+.ph{border-bottom:1px solid #eee;padding-bottom:10px}
+.ph h2{margin:4px 0 6px;font-size:22px;word-break:break-all}
+.content{white-space:pre-wrap;word-break:break-word;line-height:1.75;padding:16px 0 4px}
+.imgs img{display:block;max-width:100%;border-radius:8px;margin:10px 0;background:#f0f0f0;min-height:40px}
+.pics{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.thumb{position:relative;width:80px;height:80px}
+.thumb img{width:80px;height:80px;object-fit:cover;border-radius:8px}
+.thumb button{position:absolute;top:-6px;right:-6px;padding:0 7px;border-radius:50%;font-size:14px}
+.likewrap{text-align:center;margin:18px 0 6px}
+.like{padding:10px 22px;font-size:16px;border-radius:20px}
+.like.on{background:#e6f4d6;border-color:#8cc63f;color:#2f5e10;font-weight:600}
+.rpbox{background:#f9fbf6;border:1px solid #e1e8d8;border-radius:8px;padding:12px;margin-top:10px}
+.rpbox textarea{min-height:80px}
+.rp{padding:12px 0;border-bottom:1px solid #eef2e8}
+.actions{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+.note{font-size:13px;color:#666;margin-top:6px}
+.err{color:#c0392b;font-size:13px;min-height:18px;margin-top:4px}
+.ok{color:#2f7a12;font-size:13px;margin-top:6px}
+a.lk{color:#3d7a12;cursor:pointer;font-size:13px}
+footer{text-align:center;font-size:12px;color:#888;margin:20px 0;line-height:1.6}
 .hide{display:none}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header><h1 id="home">이화외고위키</h1><button id="lb">관리자</button></header>
+  <header>
+    <div><h1 id="home">이화외고위키</h1><small>이화외국어고등학교와 관계없는 비공식 사이트예요</small></div>
+    <div><button id="rb" class="hide">신고함</button> <button id="lb">관리자</button></div>
+  </header>
 
-  <div id="lp" class="card hide">
+  <div id="lp" class="card hide" style="margin-top:10px">
     <input id="em" type="email" placeholder="관리자 이메일">
-    <div class="row"><input id="pw" type="password" placeholder="비밀번호"><button id="pwb" class="pri">로그인</button></div>
+    <div class="bar"><input id="pw" type="password" placeholder="비밀번호"><button id="pwb" class="pri">로그인</button></div>
     <div id="pwe" class="err"></div>
   </div>
 
-  <div class="row"><input id="q" placeholder="문서 검색 또는 새 문서 이름"><button id="go">검색</button></div>
-  <div id="qerr" class="err"></div>
-
-  <div class="card">
-    <div class="top"><h2 id="ttl">대문</h2><div><button id="del" class="hide">삭제</button> <button id="eb" class="hide">편집</button></div></div>
-    <div id="meta" class="meta"></div>
-    <div id="notice" class="note"></div>
-    <div id="view" class="body">불러오는 중…</div>
-    <div id="edit" class="hide">
-      <textarea id="ta"></textarea>
-      <div id="terr" class="err"></div>
-      <div class="row" style="justify-content:flex-end"><button id="cx">취소</button><button id="sv" class="pri">저장</button></div>
-    </div>
+  <div class="bar">
+    <input id="q" placeholder="제목 검색">
+    <button id="go">검색</button>
+    <button id="wb" class="pri">글쓰기</button>
   </div>
+  <div id="tabs" class="tabs"></div>
 
-  <div class="card"><b>최근 변경</b><div id="recent"></div></div>
+  <div id="main" class="card">불러오는 중…</div>
+
+  <footer id="foot">이화외고위키는 이화외국어고등학교 및 학교법인과 아무 관계가 없는 비공식 커뮤니티입니다.<br>게시물의 내용과 책임은 작성자에게 있습니다.</footer>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, deleteDoc, collection, getDocs, getCountFromServer, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// ▼▼▼ 여기 두 곳만 ▼▼▼
+// ▼▼▼ 여기는 기존 값 그대로 넣기 ▼▼▼
 const firebaseConfig = {
   apiKey: "AIzaSyCBNoDgEXrUTF1rHVSSQY-GT4lxEK-u6CQ",
   authDomain: "ewhawiki.firebaseapp.com",
@@ -73,136 +92,341 @@ const firebaseConfig = {
   appId: "1:1028830598181:web:f8c7835c04decdbd4c9bcc"
 };
 const ADMIN_UID = "LfxKl6VWZCdz2mB5vRBbBaIXDhZ2";
+// ▼▼▼ 갤러리 목록과 신고 이메일 ▼▼▼
+const CATS = ["자유", "31기", "32기", "33기", "34기", "35기"];
+const CONTACT = "";   // 예: "ewhawiki@gmail.com" (비워두면 안 보여요)
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
+const MAXPIC = 4;
 const app = initializeApp(firebaseConfig);
 const fs = getFirestore(app);
 const auth = getAuth(app);
+const pagesCol = collection(fs, "pages");
 
-const DEFAULTS = {
-  "대문": "'''이화외고위키'''에 오신 걸 환영합니다!\n\n이화외고 학생이라면 누구나 새 문서를 작성할 수 있어요.\n\n== 시작하기 ==\n* [[이용 규칙]]을 먼저 읽어 주세요\n* [[위키 문법]]에서 쓰는 법을 확인하세요\n* 위 검색창에 없는 문서 이름을 치면 새 문서를 만들 수 있어요\n\n== 안내 ==\n이미 있는 문서의 수정과 삭제는 관리자만 할 수 있어요. 고칠 부분이 있으면 관리자에게 알려 주세요.",
-  "이용 규칙": "모두가 즐겁게 쓰는 위키를 위한 약속이에요.\n\n== 금지 사항 ==\n* 친구, 선생님 등 실존 인물에 대한 비방이나 놀림\n* 전화번호, 주소 같은 개인정보 작성\n* 허위 사실이나 욕설\n\n== 처리 ==\n규칙을 어긴 문서는 관리자가 수정하거나 삭제해요.",
-  "위키 문법": "이 위키에서 쓸 수 있는 문법이에요.\n\n== 기본 ==\n* '''굵게''' → 작은따옴표 3개로 감싸기\n* [[대문]] → 대괄호 2개로 감싸면 다른 문서 링크\n\n== 문단 ==\n등호 두 개로 감싸면 문단 제목이 돼요.\n줄 앞에 별표(*)를 붙이면 목록이 돼요."
-};
+const NOTICE_ID = encodeURIComponent("이용 규칙");
+const NOTICE_TEXT = "이화외고위키는 이화외국어고등학교 및 학교법인과 아무 관계가 없는 비공식 커뮤니티입니다. 학교의 공식 입장이나 정보가 아닙니다.\n\n게시물의 내용과 책임은 작성자에게 있습니다.\n\n[예고 없이 삭제되는 글]\n- 특정인을 비방하거나 사실이 아닌 내용을 퍼뜨리는 글\n- 이름, 연락처, 사진 등 개인정보나 초상권을 침해하는 글\n- 시험 문제, 교재 등 저작권이 있는 자료를 무단으로 올린 글\n- 학교 교표, 로고 등 공식 상징물을 사용한 글\n- 욕설이나 음란한 내용\n\n문제가 있는 글은 글 아래 '신고' 버튼으로 알려주세요. 확인 후 신속하게 삭제합니다." + (CONTACT ? "\n신고 이메일: " + CONTACT : "");
 
 const $ = id => document.getElementById(id);
-let admin = false, cache = null, confirmDel = false;
-let cur = "대문";
-try { cur = decodeURIComponent(location.hash.slice(1)) || "대문"; } catch (e) {}
+const main = $("main");
+let admin = false, seq = 0, curG = "";
+if (CONTACT) $("foot").innerHTML += "<br>권리 침해 신고: " + CONTACT.replace(/</g, "");
 
-const ref = n => doc(fs, "pages", encodeURIComponent(n));
-const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-const fmt = u => u && u.toDate ? u.toDate().toLocaleString("ko-KR") : "방금 전";
+const enc = encodeURIComponent;
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const fmt = u => u && u.toDate ? u.toDate().toLocaleString("ko-KR", { dateStyle: "short", timeStyle: "short" }) : "방금 전";
 const tag = by => by === "관리자" ? '<span class="tag">관리자</span>' : '<span class="tag anon">익명</span>';
-const badTitle = v => v.length > 100 || v === "." || v === ".." || /^__.*__$/.test(v);
+const D = d => ({ id: d.id, ...d.data() });
+const gHash = c => c ? "g/" + enc(c) : "";
 
-function inline(s) {
-  s = esc(s).replace(/'''(.+?)'''/g, "<b>$1</b>");
-  return s.replace(/\[\[(.+?)\]\]/g, (m, n) => `<a class="lk" data-p="${n}">${n}</a>`);
+function go(h) {
+  if ("#" + location.hash.slice(1) === h) route(); else location.hash = h;
 }
-function render(t) {
-  let h = "", L = false;
-  t.split("\n").forEach(l => {
-    const hm = l.match(/^==\s*(.+?)\s*==$/);
-    if (l.startsWith("* ")) { if (!L) { h += "<ul>"; L = true; } h += "<li>" + inline(l.slice(2)) + "</li>"; return; }
-    if (L) { h += "</ul>"; L = false; }
-    if (hm) h += "<h3>" + inline(hm[1]) + "</h3>";
-    else if (l.trim()) h += "<p>" + inline(l) + "</p>";
-  });
-  if (L) h += "</ul>";
-  return h;
+window.addEventListener("hashchange", route);
+
+function route() {
+  let h = "";
+  try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
+  if (h.startsWith("p/")) return showPost(h.slice(2));
+  if (h.startsWith("edit/")) return showWrite("", h.slice(5));
+  if (h === "write" || h.startsWith("write/")) return showWrite(h.slice(6));
+  if (h.startsWith("s/")) return showList({ q: h.slice(2) });
+  if (h.startsWith("g/")) return showList({ g: h.slice(2) });
+  if (h === "reports") return showReports();
+  showList({});
 }
 
-async function show(name, editing = false) {
-  cur = name; confirmDel = false;
-  history.replaceState(null, "", "#" + encodeURIComponent(name));
-  $("ttl").textContent = name; $("notice").textContent = ""; $("del").textContent = "삭제";
-  let p = null;
-  try { const s = await getDoc(ref(name)); p = s.exists() ? s.data() : null; }
-  catch (e) { $("view").textContent = "불러오지 못했어요. 새로고침해 보세요."; return; }
-  if (name !== cur) return;
-  cache = p;
-  const editMode = editing || !p;
-  $("edit").classList.toggle("hide", !editMode);
-  $("eb").classList.toggle("hide", editMode);
-  $("del").classList.toggle("hide", !(admin && p && !editMode && name !== "대문"));
-  if (editMode) {
-    $("view").innerHTML = p ? "" : "<p>아직 없는 문서예요. 누구나 새로 작성할 수 있어요.</p>";
-    $("meta").textContent = p ? "관리자 편집 중" : "새 문서 작성";
-    if (!admin) $("notice").textContent = "저장한 뒤에는 관리자만 수정할 수 있어요. 신중하게 작성해 주세요.";
-    $("ta").value = p ? p.t : ""; $("terr").textContent = "";
-  } else {
-    $("view").innerHTML = render(p.t);
-    $("meta").innerHTML = "마지막 수정: " + fmt(p.u) + tag(p.by);
-    $("eb").textContent = admin ? "편집" : "🔒 편집";
+function renderTabs() {
+  $("tabs").innerHTML = ["", ...CATS].map(c =>
+    `<button class="${c === curG ? "on" : ""}" data-h="${esc(gHash(c))}">${c ? esc(c) : "전체"}</button>`).join("");
+}
+
+function row(p, pin) {
+  const label = pin ? '<span class="pin">공지</span>' : (!curG ? `<span class="gl">${esc(p.cat || "자유")}</span>` : "");
+  const pic = p.imgs && p.imgs.length ? " 📷" : "";
+  return `<div class="item" data-id="${esc(p.id)}">${label}<span class="t">${esc(p.title)}${pic}</span><span class="m">${tag(p.by)}${fmt(p.u)}</span></div>`;
+}
+
+async function showList({ q = "", g = "" }) {
+  const my = ++seq;
+  curG = g; renderTabs();
+  main.innerHTML = '<div class="note">불러오는 중…</div>';
+  try {
+    let docs;
+    if (q) {
+      const s = await getDocs(query(pagesCol, orderBy("u", "desc"), limit(300)));
+      docs = s.docs.map(D).filter(p => p.title.includes(q));
+    } else if (g) {
+      try {
+        const s = await getDocs(query(pagesCol, where("cat", "==", g), orderBy("u", "desc"), limit(50)));
+        docs = s.docs.map(D);
+      } catch (e) {
+        const s = await getDocs(query(pagesCol, orderBy("u", "desc"), limit(300)));
+        docs = s.docs.map(D).filter(p => (p.cat || "자유") === g).slice(0, 50);
+      }
+    } else {
+      const s = await getDocs(query(pagesCol, orderBy("u", "desc"), limit(30)));
+      docs = s.docs.map(D);
+    }
+    docs = docs.filter(p => p.id !== NOTICE_ID);
+    let notice = null;
+    if (!q) { const n = await getDoc(doc(fs, "pages", NOTICE_ID)); if (n.exists()) notice = D(n); }
+    if (my !== seq) return;
+    const head = q ? `'${esc(q)}' 검색 결과 ${docs.length}개` : g ? `${esc(g)} 갤러리` : "전체 글";
+    let h = `<div class="lh"><span>${head}</span>${q ? '<a class="lk" data-h="">전체 글 보기</a>' : ""}</div>`;
+    if (notice) h += row(notice, true);
+    h += docs.map(p => row(p)).join("") || '<div class="note" style="padding:16px 0">아직 글이 없어요. 첫 글을 써보세요!</div>';
+    main.innerHTML = h;
+  } catch (e) {
+    if (my === seq) main.innerHTML = '<div class="err">불러오지 못했어요. 새로고침해 보세요.</div>';
   }
 }
 
-async function recent() {
+async function showPost(id) {
+  const my = ++seq;
+  main.innerHTML = '<div class="note">불러오는 중…</div>';
+  let p = null;
+  try { const s = await getDoc(doc(fs, "pages", id)); p = s.exists() ? D(s) : null; }
+  catch (e) { if (my === seq) main.innerHTML = '<div class="err">불러오지 못했어요. 새로고침해 보세요.</div>'; return; }
+  if (my !== seq) return;
+  if (!p) { main.innerHTML = '<div class="note">없는 글이에요.</div><div class="actions"><button data-h="">목록</button></div>'; return; }
+  const isNotice = p.id === NOTICE_ID;
+  const cat = isNotice ? "" : (p.cat || "자유");
+  curG = cat; renderTabs();
+  main.innerHTML = `
+    <div class="ph">
+      ${isNotice ? '<span class="pin">공지</span>' : `<a class="lk" data-h="${esc(gHash(cat))}">${esc(cat)} 갤러리</a>`}
+      <h2>${esc(p.title)}</h2>
+      <div class="note">${tag(p.by)}${fmt(p.u)}</div>
+    </div>
+    <div class="content">${esc(p.t || "")}</div>
+    <div id="imgs" class="imgs"></div>
+    <div class="likewrap"><button id="lkb" class="like">👍 좋아요</button></div>
+    <div id="pnote" class="note"></div>
+    <div class="actions"><button data-h="${esc(gHash(cat))}">목록</button>
+      <span>${admin ? '<button id="edb">수정</button> <button id="dlb" class="danger">삭제</button>' : (isNotice ? "" : '<button id="rpb" class="danger">🚨 신고</button>')}</span></div>
+    <div id="rpbox" class="rpbox hide">
+      <select id="rr">
+        <option value="">신고 사유를 고르세요</option>
+        <option>비방·명예훼손</option>
+        <option>개인정보·사진 무단 게시</option>
+        <option>욕설·음란물</option>
+        <option>저작권 침해</option>
+        <option>기타</option>
+      </select>
+      <textarea id="rd" placeholder="자세한 내용 (선택)" maxlength="400"></textarea>
+      <div id="rerr" class="err"></div>
+      <div class="actions"><button id="rcx">취소</button><button id="rsend" class="pri">신고하기</button></div>
+    </div>`;
+
+  const box = $("imgs");
+  (p.imgs || []).forEach(iid => {
+    const im = document.createElement("img");
+    im.alt = "첨부 사진";
+    box.appendChild(im);
+    getDoc(doc(fs, "images", iid))
+      .then(s => { if (s.exists()) im.src = s.data().data; else im.remove(); })
+      .catch(() => im.remove());
+  });
+
+  setupLike(p.id);
+
+  if (admin) {
+    let confirmDel = false;
+    $("edb").onclick = () => go("#edit/" + enc(p.id));
+    $("dlb").onclick = async () => {
+      if (!confirmDel) { confirmDel = true; $("dlb").textContent = "한 번 더 누르면 삭제"; return; }
+      try {
+        for (const iid of p.imgs || []) { try { await deleteDoc(doc(fs, "images", iid)); } catch (e) {} }
+        await deleteDoc(doc(fs, "pages", p.id));
+        go("#" + gHash(cat));
+      } catch (e) { $("pnote").textContent = "삭제하지 못했어요."; }
+    };
+  } else if (!isNotice) {
+    $("rpb").onclick = () => $("rpbox").classList.toggle("hide");
+    $("rcx").onclick = () => $("rpbox").classList.add("hide");
+    $("rr").onchange = () => $("rerr").textContent = "";
+    $("rsend").onclick = async () => {
+      const r = $("rr").value, d = $("rd").value.trim();
+      if (!r) { $("rerr").textContent = "신고 사유를 골라주세요"; return; }
+      $("rsend").disabled = true;
+      try {
+        await addDoc(collection(fs, "reports"), { p: p.id, title: p.title.slice(0, 100), reason: d ? r + " - " + d : r, u: serverTimestamp() });
+        $("rpbox").innerHTML = '<div class="ok">신고가 접수됐어요. 관리자가 확인할게요.</div>';
+      } catch (e) {
+        $("rerr").textContent = "신고하지 못했어요. 잠시 후 다시 시도해 주세요.";
+        $("rsend").disabled = false;
+      }
+    };
+  }
+}
+
+async function setupLike(id) {
+  const btn = $("lkb");
+  const uid = auth.currentUser ? auth.currentUser.uid : null;
+  const likeRef = uid ? doc(fs, "likes", id + "_" + uid) : null;
+  let liked = false, count = 0;
+  const draw = () => { if (!document.body.contains(btn)) return; btn.textContent = `👍 좋아요 ${count}`; btn.classList.toggle("on", liked); };
+  try { const c = await getCountFromServer(query(collection(fs, "likes"), where("p", "==", id))); count = c.data().count; } catch (e) {}
+  if (likeRef) { try { liked = (await getDoc(likeRef)).exists(); } catch (e) {} }
+  draw();
+  btn.onclick = async () => {
+    if (!likeRef) { $("pnote").textContent = "잠시 후 새로고침하고 다시 눌러주세요."; return; }
+    btn.disabled = true;
+    try {
+      if (liked) { await deleteDoc(likeRef); liked = false; count = Math.max(0, count - 1); }
+      else { await setDoc(likeRef, { p: id, uid, u: serverTimestamp() }); liked = true; count++; }
+      draw();
+    } catch (e) { $("pnote").textContent = "좋아요를 누르지 못했어요."; }
+    btn.disabled = false;
+  };
+}
+
+async function showReports() {
+  const my = ++seq;
+  curG = ""; renderTabs();
+  if (!admin) { go("#"); return; }
+  main.innerHTML = '<div class="note">불러오는 중…</div>';
   try {
-    const s = await getDocs(query(collection(fs, "pages"), orderBy("u", "desc"), limit(10)));
-    $("recent").innerHTML = s.docs.map(d => {
-      const p = d.data();
-      return `<div class="rc"><span><a class="lk" data-p="${esc(p.title)}">${esc(p.title)}</a>${tag(p.by)}</span><span>${fmt(p.u)}</span></div>`;
-    }).join("") || '<div class="note">아직 문서가 없어요.</div>';
+    const s = await getDocs(query(collection(fs, "reports"), orderBy("u", "desc"), limit(100)));
+    if (my !== seq) return;
+    const rs = s.docs.map(D);
+    main.innerHTML = `<div class="lh"><span>신고함 ${rs.length}건</span></div>` + (rs.map(r => `
+      <div class="rp">
+        <div><b>${esc(r.title)}</b></div>
+        <div class="note">${esc(r.reason)}</div>
+        <div class="note">${fmt(r.u)}</div>
+        <div class="actions"><button data-h="p/${esc(enc(r.p))}">글 보기</button><button data-done="${esc(r.id)}">처리 완료</button></div>
+      </div>`).join("") || '<div class="note" style="padding:16px 0">들어온 신고가 없어요.</div>');
+  } catch (e) {
+    if (my === seq) main.innerHTML = '<div class="err">불러오지 못했어요. 새로고침해 보세요.</div>';
+  }
+}
+
+async function updateReportCount() {
+  try {
+    const c = await getCountFromServer(collection(fs, "reports"));
+    const n = c.data().count;
+    $("rb").textContent = n ? `신고함 ${n}` : "신고함";
   } catch (e) {}
 }
 
-async function seed() {
-  for (const [n, t] of Object.entries(DEFAULTS)) {
-    const s = await getDoc(ref(n));
-    if (!s.exists()) await setDoc(ref(n), { title: n, t, u: serverTimestamp(), by: "관리자" });
+function compress(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const M = 1280;
+      if (w > M || h > M) { const r = Math.min(M / w, M / h); w = Math.round(w * r); h = Math.round(h * r); }
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      let q = 0.8, d = c.toDataURL("image/jpeg", q);
+      while (d.length > 700000 && q > 0.35) { q -= 0.1; d = c.toDataURL("image/jpeg", q); }
+      d.length > 900000 ? rej(new Error("big")) : res(d);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("bad")); };
+    img.src = url;
+  });
+}
+
+async function showWrite(g, editId) {
+  const my = ++seq;
+  let p = null;
+  if (editId) {
+    if (!admin) { go("#p/" + enc(editId)); return; }
+    const s = await getDoc(doc(fs, "pages", editId));
+    if (my !== seq) return;
+    if (!s.exists()) { go("#"); return; }
+    p = D(s);
   }
+  const sel = p ? (p.cat || CATS[0]) : (CATS.includes(g) ? g : CATS[0]);
+  curG = p ? "" : g; renderTabs();
+  let pics = [];
+  main.innerHTML = `
+    <div class="lh" style="margin-bottom:12px"><span>${p ? "글 수정" : "글쓰기"}</span></div>
+    <select id="wg">${CATS.map(c => `<option value="${esc(c)}" ${c === sel ? "selected" : ""}>${esc(c)} 갤러리</option>`).join("")}${p && p.id === NOTICE_ID ? '<option value="공지" selected>공지</option>' : ""}</select>
+    <input id="wt" placeholder="제목" maxlength="100" style="margin-top:8px">
+    <textarea id="wc" placeholder="내용을 입력하세요"></textarea>
+    ${p ? "" : `<label class="addpic">📷 사진 추가 (최대 ${MAXPIC}장)<input id="wf" class="vh" type="file" accept="image/*" multiple></label><div id="pics" class="pics"></div>`}
+    <div id="werr" class="err"></div>
+    ${admin ? "" : '<div class="note">발행한 뒤에는 수정하거나 지울 수 없어요. 신중하게 써주세요.</div>'}
+    <div class="actions"><button id="wcx">취소</button><button id="wsv" class="pri">${p ? "수정 완료" : "발행"}</button></div>`;
+  if (p) { $("wt").value = p.title; $("wc").value = p.t || ""; }
+  $("wt").oninput = $("wc").oninput = () => $("werr").textContent = "";
+
+  const drawPics = () => {
+    $("pics").innerHTML = pics.map((d, i) => `<div class="thumb"><img src="${d}" alt=""><button data-rm="${i}" aria-label="사진 빼기">×</button></div>`).join("");
+  };
+  if (!p) {
+    $("pics").onclick = e => { const b = e.target.closest("[data-rm]"); if (b) { pics.splice(+b.dataset.rm, 1); drawPics(); } };
+    $("wf").onchange = async e => {
+      const files = [...e.target.files]; e.target.value = "";
+      $("werr").textContent = "";
+      const room = MAXPIC - pics.length;
+      if (files.length > room) $("werr").textContent = `사진은 최대 ${MAXPIC}장까지 올릴 수 있어요`;
+      for (const f of files.slice(0, Math.max(room, 0))) {
+        try { pics.push(await compress(f)); drawPics(); }
+        catch (err) { $("werr").textContent = "사진을 불러오지 못했어요. 다른 사진으로 해보세요."; }
+      }
+    };
+  }
+
+  $("wcx").onclick = () => go(p ? "#p/" + enc(p.id) : "#" + gHash(g));
+  $("wsv").onclick = async () => {
+    const t = $("wt").value.trim(), c = $("wc").value, cat = $("wg").value;
+    if (!t) { $("werr").textContent = "제목을 입력하세요"; return; }
+    if (!c.trim() && !pics.length && !(p && p.imgs && p.imgs.length)) { $("werr").textContent = "내용을 입력하거나 사진을 추가하세요"; return; }
+    const btn = $("wsv");
+    btn.disabled = true; btn.textContent = "올리는 중…";
+    try {
+      if (p) {
+        await setDoc(doc(fs, "pages", p.id), { title: t, t: c, cat, imgs: p.imgs || [], u: serverTimestamp(), by: "관리자" });
+        go("#p/" + enc(p.id));
+      } else {
+        const ids = [];
+        for (const d of pics) {
+          const r = await addDoc(collection(fs, "images"), { data: d, u: serverTimestamp() });
+          ids.push(r.id);
+        }
+        const r = await addDoc(pagesCol, { title: t, t: c, cat, imgs: ids, u: serverTimestamp(), by: admin ? "관리자" : "익명" });
+        go("#p/" + enc(r.id));
+      }
+    } catch (e) {
+      $("werr").textContent = "발행하지 못했어요. 잠시 후 다시 시도해 주세요.";
+      btn.disabled = false; btn.textContent = p ? "수정 완료" : "발행";
+    }
+  };
 }
 
-async function search() {
-  const v = $("q").value.trim();
-  if (!v) { $("qerr").textContent = "문서 이름을 입력하세요"; return; }
-  if (badTitle(v)) { $("qerr").textContent = "쓸 수 없는 문서 이름이에요"; return; }
-  $("qerr").textContent = ""; $("q").value = "";
-  const s = await getDoc(ref(v));
-  if (s.exists()) return show(v);
-  const all = await getDocs(collection(fs, "pages"));
-  const hit = all.docs.map(d => d.data().title).find(t => t.includes(v));
-  show(hit || v);
-}
-
-const linkClick = e => { const a = e.target.closest("a.lk"); if (a) show(a.dataset.p); };
-$("view").onclick = linkClick;
-$("recent").onclick = linkClick;
-$("home").onclick = () => show("대문");
+const clickNav = async e => {
+  const done = e.target.closest("[data-done]");
+  if (done) {
+    done.disabled = true;
+    try { await deleteDoc(doc(fs, "reports", done.dataset.done)); } catch (err) {}
+    updateReportCount(); showReports(); return;
+  }
+  const it = e.target.closest(".item");
+  if (it) { go("#p/" + enc(it.dataset.id)); return; }
+  const hb = e.target.closest("[data-h]");
+  if (hb) go("#" + hb.dataset.h);
+};
+main.onclick = clickNav;
+$("tabs").onclick = clickNav;
+$("home").onclick = () => go("#");
+$("wb").onclick = () => go("#write/" + enc(curG));
+$("rb").onclick = () => go("#reports");
+const search = () => { const v = $("q").value.trim(); $("q").value = ""; go(v ? "#s/" + enc(v) : "#"); };
 $("go").onclick = search;
 $("q").onkeydown = e => { if (e.key === "Enter") search(); };
-$("q").oninput = () => $("qerr").textContent = "";
-$("ta").oninput = () => $("terr").textContent = "";
 
-$("eb").onclick = () => {
-  if (!admin) { $("notice").textContent = "문서 수정은 관리자 로그인 후 가능해요."; $("lp").classList.remove("hide"); return; }
-  show(cur, true);
+$("lb").onclick = () => {
+  const u = auth.currentUser;
+  if (u && !u.isAnonymous) { signOut(auth); return; }
+  $("lp").classList.toggle("hide");
 };
-$("cx").onclick = () => show(cache ? cur : "대문");
-
-$("sv").onclick = async () => {
-  const t = $("ta").value;
-  if (!t.trim()) { $("terr").textContent = "내용을 입력하세요"; return; }
-  if (cache && !admin) { $("terr").textContent = "이미 있는 문서는 관리자만 수정할 수 있어요"; return; }
-  $("sv").disabled = true;
-  try {
-    await setDoc(ref(cur), { title: cur, t, u: serverTimestamp(), by: admin ? "관리자" : "익명" });
-    await show(cur); recent();
-  } catch (e) {
-    $("terr").textContent = cache ? "수정 권한이 없어요" : "저장하지 못했어요. 누가 먼저 같은 문서를 만들었을 수 있어요.";
-  }
-  $("sv").disabled = false;
-};
-
-$("del").onclick = async () => {
-  if (!confirmDel) { confirmDel = true; $("del").textContent = "한 번 더 누르면 삭제"; return; }
-  try { await deleteDoc(ref(cur)); recent(); show("대문"); }
-  catch (e) { $("notice").textContent = "삭제하지 못했어요."; }
-};
-
-$("lb").onclick = () => { if (admin) { signOut(auth); return; } $("lp").classList.toggle("hide"); };
 const login = async () => {
   const em = $("em").value.trim(), pw = $("pw").value;
   if (!em || !pw) { $("pwe").textContent = "이메일과 비밀번호를 입력하세요"; return; }
@@ -213,10 +437,19 @@ $("pwb").onclick = login;
 $("pw").onkeydown = e => { if (e.key === "Enter") login(); };
 
 onAuthStateChanged(auth, async u => {
-  admin = !!u && u.uid === ADMIN_UID;
-  $("lb").textContent = u ? "로그아웃" : "관리자";
-  if (admin) await seed();
-  show(cur); recent();
+  if (!u) { try { await signInAnonymously(auth); return; } catch (e) {} }
+  const real = !!u && !u.isAnonymous;
+  admin = real && u.uid === ADMIN_UID;
+  $("lb").textContent = real ? "로그아웃" : "관리자";
+  $("rb").classList.toggle("hide", !admin);
+  if (admin) {
+    updateReportCount();
+    try {
+      const n = await getDoc(doc(fs, "pages", NOTICE_ID));
+      if (!n.exists()) await setDoc(doc(fs, "pages", NOTICE_ID), { title: "이용 규칙", t: NOTICE_TEXT, cat: "공지", imgs: [], u: serverTimestamp(), by: "관리자" });
+    } catch (e) {}
+  }
+  route();
 });
 </script>
 </body>
